@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import api from '../../api/axios';
 
 const AdminLogin = () => {
 
@@ -7,7 +8,7 @@ const AdminLogin = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!userId || !password) {
@@ -15,6 +16,23 @@ const AdminLogin = () => {
             return;
         }
         setError("")
+
+        try {
+            const response = await api.post("/api/admin/login", {
+                user_id: userId,
+                password: password,
+            });
+
+            const token = response.data.token;
+
+            localStorage.setItem("adminToken", token);
+
+            window.location.href = "/admin/dashboard";
+        } catch (error) {
+            setError(
+                error.response?.data?.message || "Login Failed"
+            );
+        }
     }
   return (
     <div className='min-h-screen flex items-center gap-[166px] mr-20'>
