@@ -9,7 +9,7 @@ export default function AdminLayout({ children }) {
 
       <div className="flex-1 flex flex-col min-h-screen">
         <Topbar />
-        <main className="flex-1 bg-gray-100 p-6">
+        <main className="flex-1 bg-gray-100 pl-6 pt-10">
           {children}
         </main>
       </div>
