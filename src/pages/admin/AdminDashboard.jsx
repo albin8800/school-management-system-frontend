@@ -1,5 +1,6 @@
 import React from "react";
 import AdminLayout from "../../layouts/AdminLayout";
+import { motion } from 'framer-motion';
 
 import {
   Chart as ChartJS,
@@ -107,15 +108,28 @@ export default function Dashboard() {
      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col">
-            <div className="flex flex-col gap-2">
-          <h3 className="text-[16px] font-medium">
-            Class-wise Attendance
-          </h3>
-          <hr className="text-[#C4C4C4]"/>
-          </div>
-          <Bar data={barData} />
-        </div>
+        <motion.div 
+      
+      initial={{ opacity: 0, y: 20 }} 
+     
+      animate={{ opacity: 1, y: 0 }} 
+      
+      transition={{ duration: 0.5, ease: "easeOut" }}
+     
+      whileHover={{ scale: 1.02 }}
+      className="bg-white p-5 rounded-lg shadow-sm flex flex-col"
+    >
+      <div className="flex flex-col gap-2">
+        <h3 className="text-[16px] font-medium">
+          Class-wise Attendance
+        </h3>
+        <hr className="text-[#C4C4C4]"/>
+      </div>
+      
+      <div className="mt-4">
+        <Bar data={barData} />
+      </div>
+    </motion.div>
 
        
         <div className="bg-white p-5 rounded-lg shadow-sm">
