@@ -132,7 +132,15 @@ export default function Dashboard() {
     </motion.div>
 
        
-        <div className="bg-white p-5 rounded-lg shadow-sm">
+        <motion.div 
+      
+      initial={{ opacity: 0, y: 20 }} 
+     
+      animate={{ opacity: 1, y: 0 }} 
+      
+      transition={{ duration: 0.5, ease: "easeOut" }}
+     
+      whileHover={{ scale: 1.02 }} className="bg-white p-5 rounded-lg shadow-sm">
             <div className="flex flex-col gap-2">
           <h3 className="text-[16px] font-medium">
             User Distribution
@@ -142,7 +150,7 @@ export default function Dashboard() {
           <div className="w-64 mx-auto">
             <Doughnut data={doughnutData} />
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   </AdminLayout>
