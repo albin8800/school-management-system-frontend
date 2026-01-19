@@ -1,6 +1,7 @@
 import React from "react";
 import AdminLayout from "../../layouts/AdminLayout";
 import { motion } from 'framer-motion';
+import api from '../../api/axios.js'
 
 import {
   Chart as ChartJS,
@@ -12,6 +13,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
+import { useState } from "react";
+import { useEffect } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -22,7 +25,16 @@ ChartJS.register(
   Legend,
 );
 
+
+
 export default function Dashboard() {
+
+
+  const [summary, setSummary] = useState(null);
+  const [classAttendance, setClassAttendance] = useState([]);
+  const [userDistribution, setUserDistribution] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const getAttendanceColor = (value) => {
     if (value >= 90) return "#16A34A";
     if (value >= 80) return "#2563EB";
@@ -30,10 +42,40 @@ export default function Dashboard() {
     return "#DC2626";
   };
 
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [ summaryRes, classRes, userRes] = await Promise.all([
+          api.get('/api/admin/dashboard/summary'),
+          api.get('/api/admin/dashboard/class-attendance'),
+          api.get('/api/admin/dashboard/user-distribution')
+        ]);
+
+        setSummary(summaryRes.data);
+        setClassAttendance(classRes.data);
+        setUserDistribution(userRes.data);
+      } catch (error) {
+        console.error("Dashboard API error:", error);
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="p-6 text-gray-500">Loading dashboard...</div>
+      </AdminLayout>
+    )
+  }
+
   const attendanceValues = [85, 90, 78, 88, 95, 40, 59, 88, 70, 66];
 
   const barData = {
-    labels: ["10 A", "10 B", "9 A", "9 B", "8 A", "8 B", "Class 7", "Class 8", "Class 9", "Class 10",],
+    labels: classAttendance.map((item) => item.class_name),
     datasets: [
       {
         label: "Attendance %",
@@ -44,11 +86,11 @@ export default function Dashboard() {
     ],
   };
 
-  const doughnutData = {
-    labels: ["Students", "Teachers", "Admins"],
+   const doughnutData = {
+    labels: userDistribution.map((u) => u.role),
     datasets: [
       {
-        data: [270, 75, 5],
+        data: userDistribution.map((u) => Number(u.count)),
         backgroundColor: ["#2563EB", "#16A34A", "#DC2626"],
         borderWidth: 0,
       },
@@ -58,28 +100,28 @@ export default function Dashboard() {
   const summaryCards = [
     {
       title: "Total Students",
-      value: 1200,
+      value: summary.totalStudents,
       color: "border-[#CC2323]",
       bg: "bg-[#FFE6E6]",
       text: "text-[#CC2323]",
     },
     {
       title: "Total Teachers",
-      value: 75,
+      value: summary.totalTeachers,
       color: "border-[#CCB623]",
       bg: "bg-[#FFF6E6]",
       text: "text-[#CCB623]",
     },
     {
       title: "Total Classes",
-      value: 32,
+      value: summary.totalClasses,
       color: "border-[#39CC23]",
       bg: "bg-[#F0FFE6]",
       text: "text-[#39CC23]",
     },
     {
       title: "Attendance",
-      value: "92%",
+      value: `${summary.attendancePercentage}%`,
       color: "border-[#2334CC]",
       bg: "bg-[#E6EDFF]",
       text: "text-[#2334CC]",
