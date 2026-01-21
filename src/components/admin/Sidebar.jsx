@@ -97,7 +97,7 @@ export default function Sidebar() {
         <h1 className="text-[24px] font-semibold">Admin Panel</h1>
 
         <nav className="mt-20 flex flex-col gap-4">
-          {/* ===== NORMAL NAV ITEMS ===== */}
+          
           {navItems.map((item) => (
             <NavLink
               key={item.name}
@@ -134,7 +134,7 @@ export default function Sidebar() {
             </NavLink>
           ))}
 
-          {/* ===== LOGOUT ITEM ===== */}
+        
           <div
             onClick={() => setShowLogout(true)}
             className="group flex items-center gap-2 px-2 py-2 rounded-lg cursor-pointer transition text-[#FC8181] hover:bg-red-50 hover:text-[#FF0000]"
@@ -156,7 +156,7 @@ export default function Sidebar() {
         </nav>
       </aside>
 
-      {/* ===== LOGOUT MODAL ===== */}
+      
       <LogoutModal
         open={showLogout}
         onClose={() => setShowLogout(false)}
