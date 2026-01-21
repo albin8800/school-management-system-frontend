@@ -66,9 +66,9 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <AdminLayout>
+      
         <div className="p-6 text-gray-500">Loading dashboard...</div>
-      </AdminLayout>
+     
     )
   }
 
@@ -130,8 +130,8 @@ export default function Dashboard() {
 
  
     return (
-  <AdminLayout>
-    <div className="p-6 space-y-6 mr-20">
+  
+    <div className="p-6 space-y-6 mr-20 mt-10">
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryCards.map((card, index) => (
@@ -195,7 +195,7 @@ export default function Dashboard() {
         </motion.div>
       </div>
     </div>
-  </AdminLayout>
+ 
 );
 
   
