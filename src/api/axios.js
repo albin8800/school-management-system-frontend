@@ -17,4 +17,20 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn("JWT expired or invalid. Logging out...");
+
+      localStorage.removeItem("adminToken");
+
+   
+      window.location.href = "/admin/login";
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;

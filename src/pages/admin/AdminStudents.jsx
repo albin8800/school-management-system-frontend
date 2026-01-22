@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import api from '../../api/axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import api from "../../api/axios";
+import { useNavigate } from "react-router-dom";
+import ViewStudentModal from "../../components/admin/ViewStudentModal";
 
 const STUDENTS_PER_PAGE = 10;
 
 const AdminStudents = () => {
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const [students, setStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +16,8 @@ const AdminStudents = () => {
   const [search, setSearch] = useState("");
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
+  const [viewOpen, setViewOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   const totalPages = Math.ceil(totalStudents / STUDENTS_PER_PAGE);
 
@@ -40,12 +42,29 @@ const AdminStudents = () => {
 
   const fetchClasses = async () => {
     try {
-        const res = await api.get('/api/admin/students/classes');
-        setClasses(res.data.data || []);
+      const res = await api.get("/api/admin/students/classes");
+      setClasses(res.data.data || []);
     } catch (error) {
-        console.error("Failed to fetch classes:", error);
+      console.error("Failed to fetch classes:", error);
     }
+  };
+
+
+const handleViewStudent = async (student) => {
+  try {
+    setLoading(true);
+
+    const res = await api.get(`/api/admin/students/students/${student.id}`);
+    setSelectedStudent(res.data.data);
+    setViewOpen(true);
+
+  } catch (error) {
+    alert("Failed to load student details");
+  } finally {
+    setLoading(false);
   }
+};
+
 
   useEffect(() => {
     fetchStudents(1);
@@ -71,7 +90,10 @@ const AdminStudents = () => {
             src="/src/assets/admin/icons/add-student.svg"
             alt=""
           />
-          <button onClick={() => navigate('/admin/add-student')} className="text-[#FFFFFF] text-[14px] font-medium">
+          <button
+            onClick={() => navigate("/admin/add-student")}
+            className="text-[#FFFFFF] text-[14px] font-medium"
+          >
             Add Students
           </button>
         </div>
@@ -80,8 +102,8 @@ const AdminStudents = () => {
       <div className="mt-10 bg-[#FFFFFF] rounded-2xl p-6">
         <div className="flex gap-4">
           <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="p-3.5 w-full outline-0 border border-[#808080] rounded-lg text-[14px] text-[#3b3b3b]"
             type="text"
             placeholder="Search by Name, Phone, Email..."
@@ -90,10 +112,13 @@ const AdminStudents = () => {
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="appearance-none text-[14px] text-[#808080] outline-0">
+              className="appearance-none text-[14px] text-[#808080] outline-0"
+            >
               <option value="">Select Class</option>
               {classes.map((cls) => (
-                <option key={cls.id} value={cls.id}>{cls.name}</option>
+                <option key={cls.id} value={cls.id}>
+                  {cls.name}
+                </option>
               ))}
             </select>
 
@@ -142,7 +167,8 @@ const AdminStudents = () => {
           </div>
         )}
 
-        {!loading && !error &&
+        {!loading &&
+          !error &&
           students.map((student) => (
             <div key={student.id}>
               <div className="grid grid-cols-6 mt-4 items-center text-sm pb-4 border-b border-[#BFBFBF]">
@@ -155,8 +181,8 @@ const AdminStudents = () => {
                 <div className="truncate">{student.email || "-"}</div>
 
                 <div className="flex justify-end gap-2">
-                  <div className="flex items-center p-1 bg-transparent hover:bg-[#E6E6FF] rounded cursor-pointer">
-                    <img
+                  <div onClick={() => handleViewStudent(student)} className="flex items-center p-1 bg-transparent hover:bg-[#E6E6FF] rounded cursor-pointer">
+                    <img 
                       className="w-5 h-5"
                       src="/src/assets/admin/icons/view.svg"
                       alt=""
@@ -228,8 +254,13 @@ const AdminStudents = () => {
           </div>
         </div>
       </div>
+     <ViewStudentModal
+        isOpen={viewOpen}
+        onClose={() => setViewOpen(false)}
+        student={selectedStudent}
+      />
     </div>
   );
-}
+};
 
 export default AdminStudents;
