@@ -3,6 +3,19 @@ import { useRef, useState } from 'react';
 
 const AddStudents = () => {
 
+    const [formData, setFormData] = useState({
+      full_name: "",
+      email: "",
+      phone: "",
+      gender: "",
+      blood_group: "",
+      roll_no: "",
+      class_id: "",
+      father_name: "",
+      mother_name: "",
+      address: "",
+    });
+
     const fileInputRef = useRef(null);
   const [photoPreview, setPhotoPreview] = useState(null);
 
@@ -28,7 +41,7 @@ const AddStudents = () => {
               alt=""
             />
 
-            <button className="text-[#FFFFFF] text-[14px] font-medium">
+            <button type='submit' className="text-[#FFFFFF] text-[14px] font-medium">
               Save
             </button>
           </div>
@@ -46,7 +59,8 @@ const AddStudents = () => {
         </div>
       </div>
 
-      <div className="flex gap-14.75 mt-10">
+      <form className="flex gap-14.75 mt-10">
+        
         <div className="flex flex-col gap-4  w-3/4">
           <div className="flex flex-col gap-2">
             <label className="text-[14px] font-medium">Full Name</label>
@@ -61,7 +75,7 @@ const AddStudents = () => {
             <div className="flex w-1/2 flex-col gap-2">
               <label className="text-[14px] font-medium">Email</label>
               <input
-                type="text"
+                type="email"
                 placeholder="Enter Email"
                 className="w-full border border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
               />
@@ -69,7 +83,8 @@ const AddStudents = () => {
             <div className="flex w-1/2 flex-col gap-2">
               <label className="text-[14px] font-medium">Phone Number</label>
               <input
-                type="text"
+                type="tel"
+                maxLength={10}
                 placeholder="Enter phone number"
                 className="w-full border border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
               />
@@ -147,36 +162,7 @@ const AddStudents = () => {
                   <option className="w-full" value="">
                     Select Class
                   </option>
-                  <option className="w-full" value="">
-                    1st
-                  </option>
-                  <option className="w-full" value="">
-                    2nd
-                  </option>
-                  <option className="w-full" value="">
-                    3rd
-                  </option>
-                  <option className="w-full" value="">
-                    4th
-                  </option>
-                  <option className="w-full" value="">
-                    5th
-                  </option>
-                  <option className="w-full" value="">
-                    6th
-                  </option>
-                  <option className="w-full" value="">
-                    7th
-                  </option>
-                  <option className="w-full" value="">
-                    8th
-                  </option>
-                  <option className="w-full" value="">
-                    9th
-                  </option>
-                  <option className="w-full" value="">
-                    10th
-                  </option>
+                  
                 </select>
                 <img
                   className="h-5 w-5"
@@ -185,41 +171,6 @@ const AddStudents = () => {
                 />
               </div>
             </div>
-            <div className="flex w-1/2 flex-col gap-2">
-              <label className="text-[14px] font-medium">Section</label>
-              <div className="flex border justify-between border-[#808080] rounded-lg p-3.5 cursor-pointer">
-                <select className="appearance-none text-[14px] w-full text-[#808080] outline-0">
-                  <option className="w-full" value="">
-                    Select Section
-                  </option>
-                  <option className="w-full" value="">
-                    A
-                  </option>
-                  <option className="w-full" value="">
-                    B
-                  </option>
-                  <option className="w-full" value="">
-                    C
-                  </option>
-                  <option className="w-full" value="">
-                    D
-                  </option>
-                  <option className="w-full" value="">
-                    E
-                  </option>
-                  <option className="w-full" value="">
-                    F
-                  </option>
-                </select>
-                <img
-                  className="h-5 w-5"
-                  src="/src/assets/admin/icons/arrow-down.svg"
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-4  justify-between">
             <div className="flex w-1/2 flex-col gap-2">
               <label className="text-[14px] font-medium">Roll No</label>
               <input
@@ -229,6 +180,7 @@ const AddStudents = () => {
               />
             </div>
           </div>
+          
 
           <div className="flex gap-4 mt-8 justify-between">
             <div className="flex w-1/2 flex-col gap-2">
@@ -290,9 +242,12 @@ const AddStudents = () => {
                   alt="Upload"
                   className="h-10 w-10"
                 />
+                <div className='flex flex-col items-center justify-center'>
                 <p className="text-[14px] font-semibold text-[#212A4B]">
                   Click to upload photo
                 </p>
+                <p className='text-[12px] text-[#878A97]'>Only .jpg, jpeg, png supported</p>
+                </div>
               </div>
             )}
           </div>
@@ -307,7 +262,8 @@ const AddStudents = () => {
             </button>
           )}
         </div>
-      </div>
+        </form>
+      
     </div>
   );
 }
