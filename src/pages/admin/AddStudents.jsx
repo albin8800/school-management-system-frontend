@@ -224,7 +224,7 @@ const AddStudents = () => {
               <label className="text-[14px] font-medium">Roll No</label>
               <input
                 type="text"
-                placeholder="Enter phone number"
+                placeholder="Enter Roll no"
                 className="w-full border border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
               />
             </div>
@@ -235,7 +235,7 @@ const AddStudents = () => {
               <label className="text-[14px] font-medium">Father's Name</label>
               <input
                 type="text"
-                placeholder="Enter Email"
+                placeholder="Enter Father's Name"
                 className="w-full border border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
               />
             </div>
@@ -243,7 +243,7 @@ const AddStudents = () => {
               <label className="text-[14px] font-medium">Mother's Name</label>
               <input
                 type="text"
-                placeholder="Enter phone number"
+                placeholder="Enter Mother's Name"
                 className="w-full border border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
               />
             </div>
@@ -251,7 +251,7 @@ const AddStudents = () => {
 
           <div className="flex gap-4  justify-between mb-20">
             <div className="flex w-full flex-col gap-2">
-              <label className="text-[14px] font-medium">Roll No</label>
+              <label className="text-[14px] font-medium">Address</label>
               <textarea
                 className="w-full border h-25 border-[#7D7D7D] rounded-lg p-3.5 outline-0 text-[14px] text-[#000000]"
                 placeholder="Enter Address"
