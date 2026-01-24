@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
+import SavingLoader from "../../components/common/SavingLoader";
 
 
 const uploadToCloudinary = async (file) => {
@@ -49,6 +50,7 @@ const AddStudents = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [classes, setClasses] = useState([]);
+  const [saving, setSaving] =useState(false);
   
 
   
@@ -91,6 +93,9 @@ const AddStudents = () => {
     
 
     try {
+
+      setSaving(true);
+
       let photoUrl = null;
 
       if (selectedFile) {
@@ -111,10 +116,10 @@ const AddStudents = () => {
       alert(error.response.data.message);
     } else {
       alert("Something went wrong");
-    }
+      setSaving(false);
+    } 
   }
   };
-
   return (
     <div className="flex flex-col mr-20">
       <div className="flex mt-8 justify-between">
@@ -386,6 +391,7 @@ const AddStudents = () => {
           )}
         </div>
       </form>
+      <SavingLoader show={saving} text="Saving Student..." />
     </div>
   );
 };

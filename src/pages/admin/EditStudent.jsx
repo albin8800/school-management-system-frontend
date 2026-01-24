@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
+import SavingLoader from "../../components/common/SavingLoader";
 
 
 const uploadToCloudinary = async (file) => {
@@ -51,6 +52,7 @@ const EditStudent = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [classes, setClasses] = useState([]);
+  const [saving, setSaving] = useState(false);
 
 
   useEffect(() => {
@@ -125,6 +127,7 @@ const EditStudent = () => {
     
 
     try {
+      setSaving(true);
       let photoUrl = null;
 
       if (selectedFile) {
@@ -145,6 +148,7 @@ const EditStudent = () => {
       alert(error.response.data.message);
     } else {
       alert("Something went wrong");
+      setSaving(false);
     }
   }
   };
@@ -420,6 +424,7 @@ const EditStudent = () => {
           )}
         </div>
       </form>
+      <SavingLoader show={saving} text="Saving Student..." />
     </div>
   );
 };

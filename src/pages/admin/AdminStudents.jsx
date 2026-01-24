@@ -3,6 +3,7 @@ import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import ViewStudentModal from "../../components/admin/ViewStudentModal";
 import ConfirmModal from "../../components/common/ConfirmModal";
+import SavingLoader from "../../components/common/SavingLoader";
 
 const STUDENTS_PER_PAGE = 10;
 
@@ -21,6 +22,7 @@ const AdminStudents = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [ deleteOpen, setDeleteOpen ] = useState(false);
   const [ studentToDelete, setStudentToDelete ] = useState(null);
+  const [ saving, setSaving ] = useState(false);
 
   const totalPages = Math.ceil(totalStudents / STUDENTS_PER_PAGE);
 
@@ -72,6 +74,7 @@ const handleDeleteStudent = async () => {
   if (!studentToDelete) return;
 
   try {
+    setSaving(true);
     await api.delete(
       `/api/admin/students/${studentToDelete.id}`
     );
@@ -307,6 +310,7 @@ const handleDeleteStudent = async () => {
   onConfirm={() => handleDeleteStudent(studentToDelete)}
 />
 
+      <SavingLoader show={saving} text="Deleting Student..." />
 
     </div>
   );
