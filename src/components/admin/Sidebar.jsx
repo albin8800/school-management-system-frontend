@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import LogoutModal from "../../components/admin/LogutModal";
+import ConfirmModal from "./ConfirmModal";
+
 
 /* ===== ICON IMPORTS ===== */
 import dashboardActive from "../../assets/admin/icons/dashboard-active.svg";
@@ -29,6 +30,7 @@ import teacherManagementInactive from "../../assets/admin/icons/teacher-manageme
 
 import studentManagementActive from "../../assets/admin/icons/student-management-active.svg";
 import studentManagementInactive from "../../assets/admin/icons/student-management-inactive.svg";
+
 
 /* ===== NAV ITEMS (NO LOGOUT HERE) ===== */
 const navItems = [
@@ -157,7 +159,7 @@ export default function Sidebar() {
       </aside>
 
       
-      <LogoutModal
+      <ConfirmModal
         open={showLogout}
         onClose={() => setShowLogout(false)}
         onLogout={handleLogout}

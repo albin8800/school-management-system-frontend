@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import ViewStudentModal from "../../components/admin/ViewStudentModal";
+import ConfirmModal from "../../components/admin/ConfirmModal";
 
 const STUDENTS_PER_PAGE = 10;
 
@@ -18,6 +19,8 @@ const AdminStudents = () => {
   const [selectedClass, setSelectedClass] = useState("");
   const [viewOpen, setViewOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [ deleteOpen, setDeleteOpen ] = useState(false);
+  const [ studentToDelete, setStudentToDelete ] = useState(null);
 
   const totalPages = Math.ceil(totalStudents / STUDENTS_PER_PAGE);
 
@@ -54,7 +57,7 @@ const handleViewStudent = async (student) => {
   try {
     setLoading(true);
 
-    const res = await api.get(`/api/admin/students/students/${student.id}`);
+    const res = await api.get(`/api/admin/students/${student.id}`);
     setSelectedStudent(res.data.data);
     setViewOpen(true);
 
@@ -64,6 +67,25 @@ const handleViewStudent = async (student) => {
     setLoading(false);
   }
 };
+
+const handleDeleteStudent = async () => {
+  if (!studentToDelete) return;
+
+  try {
+    await api.delete(
+      `/api/admin/students/${studentToDelete.id}`
+    );
+
+    setDeleteOpen(false);
+    setStudentToDelete(null);
+
+    
+    fetchStudents(currentPage);
+  } catch (error) {
+    alert("Failed to delete student");
+  }
+};
+
 
 
   useEffect(() => {
@@ -181,21 +203,35 @@ const handleViewStudent = async (student) => {
                 <div className="truncate">{student.email || "-"}</div>
 
                 <div className="flex justify-end gap-2">
-                  <div onClick={() => handleViewStudent(student)} className="flex items-center p-1 bg-transparent hover:bg-[#E6E6FF] rounded cursor-pointer">
-                    <img 
+                  <div
+                    onClick={() => handleViewStudent(student)}
+                    className="flex items-center p-1 bg-transparent hover:bg-[#E6E6FF] rounded cursor-pointer"
+                  >
+                    <img
                       className="w-5 h-5"
                       src="/src/assets/admin/icons/view.svg"
                       alt=""
                     />
                   </div>
-                  <div className="flex items-center p-1 bg-transparent hover:bg-[#E4FFE4] rounded cursor-pointer">
+                  <div
+                    onClick={() =>
+                      navigate(`/admin/edit-student/${student.id}`)
+                    }
+                    className="flex items-center p-1 bg-transparent hover:bg-[#E4FFE4] rounded cursor-pointer"
+                  >
                     <img
                       className="w-5 h-5"
                       src="/src/assets/admin/icons/edit.svg"
                       alt=""
                     />
                   </div>
-                  <div className="flex items-center p-1 bg-transparent hover:bg-[#FFDFDF] rounded cursor-pointer">
+                  <div
+                    onClick={() => {
+                      setStudentToDelete(student);
+                      setDeleteOpen(true);
+                    }}
+                    className="flex items-center p-1 bg-transparent hover:bg-[#FFDFDF] rounded cursor-pointer"
+                  >
                     <img
                       className="w-5 h-5"
                       src="/src/assets/admin/icons/delete.svg"
@@ -254,11 +290,24 @@ const handleViewStudent = async (student) => {
           </div>
         </div>
       </div>
-     <ViewStudentModal
+      <ViewStudentModal
         isOpen={viewOpen}
         onClose={() => setViewOpen(false)}
         student={selectedStudent}
       />
+<ConfirmModal
+  open={deleteOpen}
+  title="Delete Student"
+  message={`Are you sure you want to delete ${studentToDelete?.full_name}?`}
+  confirmText="Delete"
+  onClose={() => {
+    setDeleteOpen(false);
+    setStudentToDelete(null);
+  }}
+  onConfirm={() => handleDeleteStudent(studentToDelete)}
+/>
+
+
     </div>
   );
 };

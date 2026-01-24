@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
 
 
@@ -28,7 +28,9 @@ const uploadToCloudinary = async (file) => {
 
 
 
-const AddStudents = () => {
+const EditStudent = () => {
+
+    const { id } = useParams();
 
   const navigate = useNavigate();
 
@@ -49,7 +51,39 @@ const AddStudents = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const fileInputRef = useRef(null);
   const [classes, setClasses] = useState([]);
-  
+
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+    try {
+        const res = await api.get(`/api/admin/students/${id}`);
+        const s = res.data.data;
+
+         setFormData({
+          full_name: s.full_name || "",
+          email: s.email || "",
+          phone: s.phone || "",
+          gender: s.gender || "",
+          blood_group: s.blood_group || "",
+          class_id: s.class_id || "",
+          roll_no: s.roll_no || "",
+          father_name: s.father_name || "",
+          mother_name: s.mother_name || "",
+          address: s.address || "",
+        });
+
+        setPhotoPreview(s.photo || null);
+    } catch (error) {
+        alert("Failed to load student details");
+        navigate('/admin/student-management');
+        
+    } 
+    
+  }
+
+    fetchStudents();
+}, [id]);
+
 
   
   const handlePhotoChange = (e) => {
@@ -102,7 +136,7 @@ const AddStudents = () => {
         photo: photoUrl,
       };
 
-      await api.post('/api/admin/students/add-student', payload);
+      await api.put(`/api/admin/students/${id}`, payload);
 
       navigate('/admin/student-management');
      
@@ -119,8 +153,8 @@ const AddStudents = () => {
     <div className="flex flex-col mr-20">
       <div className="flex mt-8 justify-between">
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-[24px] font-semibold">Add Student</h1>
-          <p className="text-[14px] text-[#545454]">Add a New Student</p>
+          <h1 className="text-[24px] font-semibold">Edit Student</h1>
+          <p className="text-[14px] text-[#545454]">Update student details</p>
         </div>
 
         <div className="flex gap-4">
@@ -134,7 +168,7 @@ const AddStudents = () => {
               src="/src/assets/admin/icons/save.svg"
               alt=""
             />
-            <span className="text-[#FFFFFF] text-[14px] font-medium">Save</span>
+            <span className="text-[#FFFFFF] text-[14px] font-medium">Save Changes</span>
           </button>
 
           <button
@@ -390,4 +424,4 @@ const AddStudents = () => {
   );
 };
 
-export default AddStudents;
+export default EditStudent;

@@ -7,6 +7,8 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminStudents from './pages/admin/AdminStudents';
 import Designcheck from './pages/admin/designcheck';
 import AddStudents from './pages/admin/AddStudents';
+import EditStudent from './pages/admin/EditStudent';
+
 
 const App = () => {
   return (
@@ -18,6 +20,7 @@ const App = () => {
           <Route path= "/admin/dashboard" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
           <Route path= "/admin/student-management" element={<AdminLayout><AdminStudents /></AdminLayout>} />
           <Route path= "/admin/add-student" element={<AdminLayout><AddStudents /></AdminLayout>} />
+          <Route path= "/admin/edit-student/:id" element={<AdminLayout><EditStudent /></AdminLayout>} />
           <Route path= "/admin/check" element={<Designcheck />} />
         </Routes>
     
