@@ -7,6 +7,7 @@ export default function ConfirmModal({
   confirmText = "Logout",
   onClose,
   onConfirm,
+  onLogout,
 }) {
   if (!open) return null;
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "../common/ConfirmModal";
 
 
 /* ===== ICON IMPORTS ===== */
@@ -162,7 +162,7 @@ export default function Sidebar() {
       <ConfirmModal
         open={showLogout}
         onClose={() => setShowLogout(false)}
-        onLogout={handleLogout}
+        onConfirm={handleLogout}
       />
     </>
   );
